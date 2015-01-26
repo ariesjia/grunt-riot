@@ -1,0 +1,31 @@
+{
+  "name": "grunt-riot",
+  "version": "0.0.1",
+  "description": "The best Grunt plugin ever.",
+  "repository": "",
+  "author": {
+    "name": "ariesjia",
+    "email": "ariesjia00@hotmail.com",
+    "url": "https://github.com/ariesjia"
+  },
+  "keywords": [
+    "riot custom tag compule grunt plugin"
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-nodeunit": "~0.3.0",
+    "jshint-stylish": "~0.1.5",
+    "load-grunt-tasks": "~0.3.0",
+    "riot": "^2.0.2"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
