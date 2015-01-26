@@ -1,7 +1,7 @@
 {
   "name": "grunt-riot",
   "version": "0.0.1",
-  "description": "The best Grunt plugin ever.",
+  "description": "riot custom tag compile grunt plugin.",
   "repository": "",
   "author": {
     "name": "ariesjia",
@@ -9,7 +9,7 @@
     "url": "https://github.com/ariesjia"
   },
   "keywords": [
-    "riot custom tag compule grunt plugin"
+    "riot custom tag compile grunt plugin"
   ],
   "main": "Gruntfile.js",
   "engines": {
