@@ -48,6 +48,7 @@ grunt.initConfig({
 * parser: `Function`
 	* custom javascript parser method
 	* default : `null`
+See more: [https://muut.com/riotjs/compiler.html](https://muut.com/riotjs/compiler.html)
 
 
 ## Release History
