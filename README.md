@@ -1,25 +1,22 @@
 # grunt-riot
 
-> The best Grunt plugin ever.
+> grunt plugin for riot
 
-
-## Riot 
-[Grunt](http://gruntjs.com/)
+This plugin compile [riot](https://github.com/muut/riotjs)'s `.tag` files.
 
 ## Getting Started
 This plugin requires Grunt.
-
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
 ```shell
 npm install grunt-riot --save-dev
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Once that's done, add this line to your project's Gruntfile :
 
 ```js
 grunt.loadNpmTasks('grunt-riot');
 ```
+Or use [load-grunt-tasks](https://github.com/sindresorhus/load-grunt-tasks)
 
 
 ### Usage Examples
@@ -35,6 +32,24 @@ grunt.initConfig({
   },
 })
 ```
+
+### Options
+* compact: `Boolean`
+	* no whitespace between tags
+	* default : `True`
+* expr: `Boolean`
+	* expressions trough parser
+	* default : `True`
+* type: `String`
+	* javaScript parser type
+	* default : `null`
+* template: `String`
+	* template parser
+	* default : `null`
+* parser: `Function`
+	* custom javascript parser method
+	* default : `null`
+
 
 ## Release History
 2015-01-26  0.0.1
