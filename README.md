@@ -11,12 +11,11 @@ This plugin requires Grunt.
 npm install grunt-riot --save-dev
 ```
 
-Once that's done, add this line to your project's Gruntfile :
+Once that's done, add this line to your project's Gruntfile Or use [load-grunt-tasks](https://github.com/sindresorhus/load-grunt-tasks) 
 
 ```js
 grunt.loadNpmTasks('grunt-riot');
 ```
-Or use [load-grunt-tasks](https://github.com/sindresorhus/load-grunt-tasks)
 
 
 ### Usage Examples
@@ -36,10 +35,10 @@ grunt.initConfig({
 ### Options
 * compact: `Boolean`
 	* no whitespace between tags
-	* default : `True`
+	* default : `true`
 * expr: `Boolean`
 	* expressions trough parser
-	* default : `True`
+	* default : `true`
 * type: `String`
 	* javaScript parser type
 	* default : `null`
