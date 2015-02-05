@@ -48,7 +48,7 @@ module.exports = function (grunt) {
 		};
 
 		function getOptions(file, options) {
-			return options.fileConfig ? options.fileConfig(file,options) : options;
+			return options.fileConfig ? options.fileConfig(file,clone(options)) : options;
 		}
 
 		this.files.forEach(function (files) {
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
 			validFiles.map(function(file){
 				writeFile(
 					files.dest ,
-					compileRiot( grunt.file.read(file) , getOptions(file,clone(options)) )
+					compileRiot( grunt.file.read(file) , getOptions(file,options) )
 				);
 			});
 		});
