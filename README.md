@@ -23,18 +23,24 @@ grunt.loadNpmTasks('grunt-riot');
 ```js
 grunt.initConfig({
   riot: {
-    expand: true,
-    cwd: '<%= app %>/scripts',
-    src: '**/*.tag',
-    dest: '<%= app %>/scripts',
-    ext: '.js'
+    options:{
+        template : 'jade',
+        type : 'coffeescript'
+    },
+    dist: {
+        expand: true,
+        cwd: '<%= app %>/scripts',
+        src: '**/*.tag',
+        dest: '<%= app %>/scripts',
+        ext: '.js'
+    }
   },
 })
 ```
 
 ### Options
 * compact: `Boolean`
-	* no whitespace between tags
+	* no whitespace between tags . eg : '<a></a> <span></span>' to '<a></a><span></span>'
 	* default : `true`
 * expr: `Boolean`
 	* expressions trough parser
@@ -48,6 +54,17 @@ grunt.initConfig({
 * parser: `Function`
 	* custom javascript parser method
 	* default : `null`
+* fileConfig: `Function`
+	* you can set single file compile option in callback 
+	* default : `null`
+
+if you want use typescript , coffee or es , you should install compile module
+
+* typescript :  typescript-simple
+* coffeescript :  coffee-script
+* es6 :  6to5
+* jade :  jade
+
 See more: [https://muut.com/riotjs/compiler.html](https://muut.com/riotjs/compiler.html)
 
 

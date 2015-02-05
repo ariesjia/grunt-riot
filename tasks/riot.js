@@ -20,7 +20,7 @@ module.exports = function (grunt) {
 			expr : true ,
 			type : null ,
 			template : null,
-			parser : null
+			fileConfig : null
 		});
 
 		var removeInvalidFiles = function(files) {
@@ -43,12 +43,16 @@ module.exports = function (grunt) {
 			grunt.log.writeln('File ' + path + ' created.');
 		};
 
+		function getOptions(file, options) {
+			return options.fileConfig ? options.fileConfig(file,options) : options;
+		}
+
 		this.files.forEach(function (files) {
 			var validFiles  = removeInvalidFiles(files);
 			validFiles.map(function(file){
 				writeFile(
 					files.dest ,
-					compileRiot( grunt.file.read(file) , options )
+					compileRiot( grunt.file.read(file) , getOptions(file,options) )
 				);
 			});
 		});
