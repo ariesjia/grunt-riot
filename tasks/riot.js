@@ -34,6 +34,10 @@ module.exports = function (grunt) {
 			});
 		};
 
+		var clone = function(obj) {
+			return JSON.parse(JSON.stringify(obj));
+		};
+
 		var compileRiot = function(code, opts){
 			return riot.compile(code,opts)
 		};
@@ -52,7 +56,7 @@ module.exports = function (grunt) {
 			validFiles.map(function(file){
 				writeFile(
 					files.dest ,
-					compileRiot( grunt.file.read(file) , getOptions(file,options) )
+					compileRiot( grunt.file.read(file) , getOptions(file,clone(options)) )
 				);
 			});
 		});
