@@ -1,6 +1,6 @@
 {
   "name": "grunt-riot",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "riot custom tag compile grunt plugin.",
   "repository": "https://github.com/ariesjia/grunt-riot",
   "author": {
@@ -17,7 +17,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "concat-stream": "^1.4.7",
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-jshint": "~0.8.0",
@@ -30,6 +29,7 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "concat-stream": "^1.4.7",
     "riot": "^2.0.13"
   }
 }

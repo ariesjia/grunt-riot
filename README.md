@@ -57,6 +57,9 @@ grunt.initConfig({
 * fileConfig: `Function`
 	* you can set single file compile option in callback 
 	* default : `null`
+* concat: `Boolean`
+	* you can concat multiple tag file to a single file 
+	* default : `false`
 
 if you want use typescript , coffee or es , you should install compile module
 
