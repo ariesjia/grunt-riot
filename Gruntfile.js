@@ -33,21 +33,12 @@ module.exports = function (grunt) {
 
     // Configuration to be run (and then tested).
     riot: {
-      default_options: {
+      concatFile: {
         options: {
+	        //concat : true
         },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
+        src: 'test/fixtures/*.tag',
+        dest: 'test/expected/concatFile.js'
       }
     },
 

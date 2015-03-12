@@ -11,7 +11,8 @@
 module.exports = function (grunt) {
 
 	var riot = require('riot'),
-		path = require('path');
+		path = require('path'),
+		concat = require('concat-stream');
 
 	grunt.registerMultiTask('riot', 'riot custom tag compule grunt plugin', function () {
 
@@ -20,7 +21,8 @@ module.exports = function (grunt) {
 			expr : true ,
 			type : null ,
 			template : null,
-			fileConfig : null
+			fileConfig : null,
+			concat : false
 		});
 
 		var removeInvalidFiles = function(files) {
@@ -53,12 +55,28 @@ module.exports = function (grunt) {
 
 		this.files.forEach(function (files) {
 			var validFiles  = removeInvalidFiles(files);
-			validFiles.map(function(file){
-				writeFile(
-					files.dest ,
-					compileRiot( grunt.file.read(file) , getOptions(file,options) )
-				);
-			});
+
+			if(options.concat){
+				var strings = concat(function(out) {
+					writeFile(
+						files.dest ,
+						out
+					);
+				});
+				validFiles.map(function(file){
+					var fileSource = compileRiot( grunt.file.read(file) , getOptions(file,options) );
+					strings.write(fileSource);
+				});
+				strings.end();
+			}else{
+				validFiles.map(function(file){
+					writeFile(
+						files.dest ,
+						compileRiot( grunt.file.read(file) , getOptions(file,options) )
+					);
+				});
+			}
+
 		});
 
 	});
