@@ -38,6 +38,22 @@ grunt.initConfig({
 })
 ```
 
+if you want concat to a single file  , take care not to set `expand: true` ，eg:
+
+```js
+grunt.initConfig({
+  riot: {
+    options: {
+        concat : true
+    },
+    src: 'script/*.tag',
+    dest: '.tmp/tag.js'
+  },
+})
+```
+
+
+
 ### Options
 * compact: `Boolean`
 	* no whitespace between tags . eg : '<a></a> <span></span>' to '<a></a><span></span>'
