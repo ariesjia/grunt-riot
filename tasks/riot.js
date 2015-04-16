@@ -97,7 +97,7 @@ module.exports = function (grunt) {
 				});
 				strings.end();
 			}else{
-				validFiles.map(function(file){
+				files.src.map(function(file){
 					writeFile(
 						files.dest ,
 						compileRiot( grunt.file.read(file) , getOptions(file,options) )
