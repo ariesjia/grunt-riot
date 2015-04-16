@@ -14,7 +14,8 @@ module.exports = function (grunt) {
 		path = require('path'),
 		concat = require('concat-stream');
 
-	grunt.registerMultiTask('riot', 'riot custom tag compule grunt plugin', function () {
+	grunt.registerMultiTask('riot', 'riot custom tag compiler plugin', function () {
+		var self = this;
 
 		var options = this.options({
 			compact : true ,
@@ -22,7 +23,8 @@ module.exports = function (grunt) {
 			type : null ,
 			template : null,
 			fileConfig : null,
-			concat : false
+			concat : false,
+			modular: false
 		});
 
 		var removeInvalidFiles = function(files) {
@@ -53,10 +55,23 @@ module.exports = function (grunt) {
 			return options.fileConfig ? options.fileConfig(file,clone(options)) : options;
 		}
 
-		this.files.forEach(function (files) {
+		this.files.forEach(function (files, i) {
 			var validFiles  = removeInvalidFiles(files);
 
 			if(options.concat){
+				var mHeader = '';
+				mHeader += '(function(tagger) {\n';
+				mHeader += '  if (typeof define === \'function\' && define.amd) {\n';
+				mHeader += '    define([\'riot\'], function(riot) { tagger(riot); });\n';
+				mHeader += '  } else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
+				mHeader += '    tagger(require(\'riot\'));\n';
+				mHeader += '  } else {\n';
+				mHeader += '    tagger(window.riot);\n';
+				mHeader += '  }\n';
+				mHeader += '})(function(riot) {\n';
+
+				var mFooter = '\n});';
+
 				var strings = concat(function(out) {
 					writeFile(
 						files.dest ,
@@ -65,7 +80,15 @@ module.exports = function (grunt) {
 				});
 				validFiles.map(function(file){
 					var fileSource = compileRiot( grunt.file.read(file) , getOptions(file,options) );
+
+					if (options.modular && i === 0)
+						strings.write(mHeader);
+
 					strings.write(fileSource);
+
+					if (options.modular && i === self.files.length - 1)
+						strings.write(mFooter);
+
 				});
 				strings.end();
 			}else{
