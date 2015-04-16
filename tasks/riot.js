@@ -55,38 +55,43 @@ module.exports = function (grunt) {
 			return options.fileConfig ? options.fileConfig(file,clone(options)) : options;
 		}
 
-		this.files.forEach(function (files, i) {
-			var validFiles  = removeInvalidFiles(files);
+		var validFiles = this.files.map(function (files) {
+			return {
+				src: removeInvalidFiles(files),
+				dest: files.dest
+			};
+		});
 
+		var mHeader = '';
+		mHeader += '(function(tagger) {\n';
+		mHeader += '  if (typeof define === \'function\' && define.amd) {\n';
+		mHeader += '    define([\'riot\'], function(riot) { tagger(riot); });\n';
+		mHeader += '  } else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
+		mHeader += '    tagger(require(\'riot\'));\n';
+		mHeader += '  } else {\n';
+		mHeader += '    tagger(window.riot);\n';
+		mHeader += '  }\n';
+		mHeader += '})(function(riot) {\n';
+
+		var mFooter = '});';
+
+		validFiles.forEach(function (files, x) {
 			if(options.concat){
-				var mHeader = '';
-				mHeader += '(function(tagger) {\n';
-				mHeader += '  if (typeof define === \'function\' && define.amd) {\n';
-				mHeader += '    define([\'riot\'], function(riot) { tagger(riot); });\n';
-				mHeader += '  } else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
-				mHeader += '    tagger(require(\'riot\'));\n';
-				mHeader += '  } else {\n';
-				mHeader += '    tagger(window.riot);\n';
-				mHeader += '  }\n';
-				mHeader += '})(function(riot) {\n';
-
-				var mFooter = '\n});';
-
 				var strings = concat(function(out) {
 					writeFile(
 						files.dest ,
 						out
 					);
 				});
-				validFiles.map(function(file){
+				files.src.map(function(file, y){
 					var fileSource = compileRiot( grunt.file.read(file) , getOptions(file,options) );
 
-					if (options.modular && i === 0)
+					if (options.modular && x === 0 && y === 0)
 						strings.write(mHeader);
 
-					strings.write(fileSource);
+					strings.write(fileSource + '\n');
 
-					if (options.modular && i === self.files.length - 1)
+					if (options.modular && !validFiles[x + 1] && y === files.src.length - 1)
 						strings.write(mFooter);
 
 				});
