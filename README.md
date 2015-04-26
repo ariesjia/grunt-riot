@@ -94,10 +94,9 @@ grunt.initConfig({
 * concat: `Boolean`
 	* you can concat multiple tag file to a single file 
 	* default : `false`
-* modular: `Boolean` or `Array`
+* modular: `Boolean` or dependency `Array`
 	* AMD and CommonJS
 	* default : `false`
-	* 
 
 if you want use typescript , coffee or es , you should install compile module
 
