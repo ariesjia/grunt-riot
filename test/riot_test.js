@@ -31,6 +31,7 @@ exports.riot = {
     test.expect(1);
     var actual = grunt.file.read('test/tmp/concatFile.js');
     var expected = grunt.file.read('test/expected/concatFile.js');
+
     test.equal(actual, expected);
     test.done();
   }

@@ -1,3 +1,21 @@
+(function(tagger) {
+	if (typeof define === 'function' && define.amd) {
+		define(['riot', 'jquery', 'lib/my_module'], function(riot, $, MyModule) {
+			tagger(riot, $, MyModule);
+		});
+	} else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+		var riot = require('riot');
+		var $ = require('jquery');
+		var MyModule = require('lib/my_module');
+		tagger(riot, $, MyModule);
+	} else {
+		tagger(window.riot);
+	}
+})(function(riot, $, MyModule) {
+riot.tag('test', '<h3>{this is a test file}</h3>', function(opts) {
+		console.log('test')
+	
+});
 riot.tag('todo', '<h3>{opts.title}</h3><ul><li each="{items}"><label class="{completed: done}"><input type="checkbox" __checked="{done}" onclick="{parent.toggle}"> {title} </label></li></ul><form onsubmit="{add}"><input name="input" onkeyup="{edit}"><button __disabled="{!text}">Add #{items.length + 1}</button></form>', function(opts) {
 		this.disabled = true
 
@@ -20,4 +38,5 @@ riot.tag('todo', '<h3>{opts.title}</h3><ul><li each="{items}"><label class="{com
 			return true
 		}.bind(this);
 	
+});
 });
