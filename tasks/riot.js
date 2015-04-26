@@ -51,6 +51,44 @@ module.exports = function (grunt) {
 			grunt.log.writeln('File ' + path + ' created.');
 		};
 
+		var generateModularHeader = function () {
+			var modules = options.modular instanceof Array ? options.modular : [ { 'riot': 'riot' } ];
+			var params = '';
+			var amdRequired = '';
+			var commonJSRequired = '';
+
+			modules.forEach(function (m, i) {
+				for (var path in m) {
+					var param = m[path];
+
+					amdRequired += "'" + path + "'";
+					commonJSRequired += '\t\tvar ' + param + ' = require(\'' + path + '\');\n';
+					params += param;
+
+					if (i < modules.length - 1) {
+						amdRequired += ', ';
+						params += ', ';
+					}
+				}
+			});
+
+			var header = '';
+			header += '(function(tagger) {\n';
+			header += '	if (typeof define === \'function\' && define.amd) {\n';
+			header += '		define([' + amdRequired + '], function(' + params + ') {\n';
+			header += '			tagger(' + params + ');\n';
+			header += '		});\n';
+			header += '	} else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
+			header += commonJSRequired;
+			header += '		tagger(' + params + ');\n';
+			header += '	} else {\n';
+			header += '		tagger(window.riot);\n';
+			header += '	}\n';
+			header += '})(function(' + params + ') {\n';
+
+			return header;
+		};
+
 		function getOptions(file, options) {
 			return options.fileConfig ? options.fileConfig(file,clone(options)) : options;
 		}
@@ -62,16 +100,7 @@ module.exports = function (grunt) {
 			};
 		});
 
-		var mHeader = '';
-		mHeader += '(function(tagger) {\n';
-		mHeader += '  if (typeof define === \'function\' && define.amd) {\n';
-		mHeader += '    define([\'riot\'], function(riot) { tagger(riot); });\n';
-		mHeader += '  } else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
-		mHeader += '    tagger(require(\'riot\'));\n';
-		mHeader += '  } else {\n';
-		mHeader += '    tagger(window.riot);\n';
-		mHeader += '  }\n';
-		mHeader += '})(function(riot) {\n';
+		var mHeader = generateModularHeader();
 
 		var mFooter = '});';
 
