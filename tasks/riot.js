@@ -8,10 +8,11 @@
 
 'use strict';
 
+
 module.exports = function (grunt) {
+	require('grunt-modularize/tasks/modularize')(grunt);
 
 	var riot = require('riot'),
-		path = require('path'),
 		concat = require('concat-stream');
 
 	grunt.registerMultiTask('riot', 'riot custom tag compiler plugin', function () {
@@ -41,7 +42,7 @@ module.exports = function (grunt) {
 		};
 
 		var compileRiot = function(code, opts){
-			return riot.compile(code,opts)
+			return riot.compile(code,opts);
 		};
 
 		var writeFile = function (path, output) {
@@ -82,10 +83,11 @@ module.exports = function (grunt) {
 				});
 			}
 
+			//console.log(grunt)
+
 			if (options.modular) {
 				var srcDest = {};
-				var absolutePath = path.join(__dirname, '../', files.dest);
-				srcDest[absolutePath] = absolutePath;
+				srcDest[files.dest] = files.dest;
 
 				grunt.config.set('modularize.compile', {
 					options: {
