@@ -57,6 +57,8 @@ module.exports = function (grunt) {
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
+  grunt.loadNpmTasks('grunt-modularize');
+
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'riot:compile', 'nodeunit']);
