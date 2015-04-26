@@ -22,14 +22,13 @@
     "grunt-contrib-jshint": "~0.8.0",
     "grunt-contrib-nodeunit": "~0.3.0",
     "jshint-stylish": "~0.1.5",
-    "load-grunt-tasks": "~0.3.0",
-    "riot": "~2.0.13"
+    "load-grunt-tasks": "~0.3.0"
   },
   "scripts": {
     "test": "grunt test"
   },
   "dependencies": {
     "concat-stream": "^1.4.7",
-    "riot": "^2.0.13"
+    "riot": "^2.0.15"
   }
 }
