@@ -60,7 +60,7 @@ grunt.initConfig({
     options: {
         concat : true,
         modular: [
-          {'riot': 'riot'},
+          'riot',
           {'jquery': '$'},
           {'lib/my_module': 'MyModule'}
         ]

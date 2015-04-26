@@ -52,12 +52,18 @@ module.exports = function (grunt) {
 		};
 
 		var generateModularHeader = function () {
-			var modules = options.modular instanceof Array ? options.modular : [ { 'riot': 'riot' } ];
+			var modules = options.modular instanceof Array ? options.modular : ['riot'];
 			var params = '';
 			var amdRequired = '';
 			var commonJSRequired = '';
 
 			modules.forEach(function (m, i) {
+				if (typeof(m) === 'string') {
+					var obj = {};
+					obj[m] = m;
+					m = obj;
+				}
+
 				for (var path in m) {
 					var param = m[path];
 
