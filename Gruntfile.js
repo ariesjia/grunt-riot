@@ -9,8 +9,8 @@
 'use strict';
 
 module.exports = function (grunt) {
-  // load all npm grunt tasks
-  require('load-grunt-tasks')(grunt);
+	// load all npm grunt tasks
+	require('load-grunt-tasks')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -28,17 +28,22 @@ module.exports = function (grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp']
+      test: ['test/tmp/**']
     },
 
     // Configuration to be run (and then tested).
     riot: {
-      concatFile: {
+      compile: {
         options: {
-	        //concat : true
-        },
+					concat: true,
+					modular: [
+						'riot',
+						{'jquery': '$'},
+						{'lib/my_module': 'MyModule'}
+					]
+				},
         src: 'test/fixtures/*.tag',
-        dest: 'test/expected/concatFile.js'
+        dest: 'test/tmp/concatFile.js'
       }
     },
 
@@ -46,7 +51,6 @@ module.exports = function (grunt) {
     nodeunit: {
       tests: ['test/*_test.js']
     }
-
   });
 
   // Actually load this plugin's task(s).
@@ -54,9 +58,8 @@ module.exports = function (grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'riot', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'riot:compile', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
-
+  grunt.registerTask('default', ['jshint', 'test', 'clean']);
 };

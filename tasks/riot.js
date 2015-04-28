@@ -8,15 +8,14 @@
 
 'use strict';
 
+
 module.exports = function (grunt) {
+	require('grunt-modularize/tasks/modularize')(grunt);
 
 	var riot = require('riot'),
-		path = require('path'),
 		concat = require('concat-stream');
 
 	grunt.registerMultiTask('riot', 'riot custom tag compiler plugin', function () {
-		var self = this;
-
 		var options = this.options({
 			compact : true ,
 			expr : true ,
@@ -43,7 +42,7 @@ module.exports = function (grunt) {
 		};
 
 		var compileRiot = function(code, opts){
-			return riot.compile(code,opts)
+			return riot.compile(code,opts);
 		};
 
 		var writeFile = function (path, output) {
@@ -62,19 +61,6 @@ module.exports = function (grunt) {
 			};
 		});
 
-		var mHeader = '';
-		mHeader += '(function(tagger) {\n';
-		mHeader += '  if (typeof define === \'function\' && define.amd) {\n';
-		mHeader += '    define([\'riot\'], function(riot) { tagger(riot); });\n';
-		mHeader += '  } else if (typeof module !== \'undefined\' && typeof module.exports !== \'undefined\') {\n';
-		mHeader += '    tagger(require(\'riot\'));\n';
-		mHeader += '  } else {\n';
-		mHeader += '    tagger(window.riot);\n';
-		mHeader += '  }\n';
-		mHeader += '})(function(riot) {\n';
-
-		var mFooter = '});';
-
 		validFiles.forEach(function (files, x) {
 			if(options.concat){
 				var strings = concat(function(out) {
@@ -85,15 +71,7 @@ module.exports = function (grunt) {
 				});
 				files.src.map(function(file, y){
 					var fileSource = compileRiot( grunt.file.read(file) , getOptions(file,options) );
-
-					if (options.modular && x === 0 && y === 0)
-						strings.write(mHeader);
-
 					strings.write(fileSource + '\n');
-
-					if (options.modular && !validFiles[x + 1] && y === files.src.length - 1)
-						strings.write(mFooter);
-
 				});
 				strings.end();
 			}else{
@@ -105,8 +83,22 @@ module.exports = function (grunt) {
 				});
 			}
 
-		});
+			//console.log(grunt)
 
+			if (options.modular) {
+				var srcDest = {};
+				srcDest[files.dest] = files.dest;
+
+				grunt.config.set('modularize.compile', {
+					options: {
+						deps: options.modular instanceof Array ? options.modular : ['riot']
+					},
+					files: srcDest
+				});
+
+				grunt.task.run(['modularize:compile']);
+			}
+		});
 	});
 
 };
