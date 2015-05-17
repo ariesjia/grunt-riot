@@ -15,6 +15,8 @@ module.exports = function (grunt) {
 	var riot = require('riot'),
 		concat = require('concat-stream');
 
+
+
 	grunt.registerMultiTask('riot', 'riot custom tag compiler plugin', function () {
 		var options = this.options({
 			compact : true ,
@@ -25,6 +27,8 @@ module.exports = function (grunt) {
 			concat : false,
 			modular: false
 		});
+
+		var modularFiles = {};
 
 		var removeInvalidFiles = function(files) {
 			return files.src.filter(function(filepath) {
@@ -83,22 +87,43 @@ module.exports = function (grunt) {
 				});
 			}
 
-			//console.log(grunt)
-
-			if (options.modular) {
-				var srcDest = {};
-				srcDest[files.dest] = files.dest;
-
-				grunt.config.set('modularize.compile', {
-					options: {
-						deps: options.modular instanceof Array ? options.modular : ['riot']
-					},
-					files: srcDest
-				});
-
-				grunt.task.run(['modularize:compile']);
-			}
+			if (options.modular)
+				modularFiles[files.dest] = files.dest;
 		});
+
+		if (options.modular) {
+			if (typeof(options.modular) !== 'object')
+				options.modular = {};
+
+			if (!options.modular.deps)
+				options.modular.deps = [];
+
+			var hasRiotDep;
+			var len = options.modular.deps.length;
+
+			for (var i = 0; i < len; i++) {
+				var dep = options.modular.deps[i];
+
+				if (dep === 'riot') {
+					hasRiotDep = true;
+					break;
+				}
+				else if (typeof(dep) === 'object' && Object.keys(dep)[0] === 'riot') {
+					hasRiotDep = true;
+					break;
+				}
+			}
+
+			if (!hasRiotDep)
+				options.modular.deps.unshift('riot');
+
+			grunt.config.set('modularize.riot', {
+				options: options.modular,
+				files: modularFiles
+			});
+
+			grunt.task.run(['modularize:riot']);
+		}
 	});
 
 };
