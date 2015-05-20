@@ -58,12 +58,15 @@ if you want concat to a single file with AMD and CommonJS support including depe
 grunt.initConfig({
   riot: {
     options: {
-        concat : true,
-        modular: [
+      concat : true,
+      modular: {
+        type: 'umd',
+        deps: [
           'riot',
           {'jquery': '$'},
           {'lib/my_module': 'MyModule'}
         ]
+      }
     },
     src: 'script/*.tag',
     dest: '.tmp/tag.js'
@@ -94,8 +97,13 @@ grunt.initConfig({
 * concat: `Boolean`
 	* you can concat multiple tag file to a single file 
 	* default : `false`
-* modular: `Boolean` or dependency `Array`
-	* AMD and CommonJS
+* modular: `Boolean` or modularization options:
+  * type: `amd` or `common` or `umd`
+  	* modularization type
+  	* default : `umd`
+  * deps: `Array`
+  	* modularization dependencies
+  	* default : `['riot']`
 	* default : `false`
 
 if you want use typescript , coffee or es , you should install compile module
