@@ -83,6 +83,8 @@ module.exports = function (grunt) {
 				modularConfig.input = source;
 
 				return modularize(modularConfig);
+			}else{
+				return source;g
 			}
 		}
 
