@@ -22,17 +22,22 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+
+var cleanCode =  function (str){
+	return str.replace(/\ +/g,"")
+		.replace(/[ ]/g,"")
+		.replace(/[\r\n\t]/g,"");
+};
+
 exports.riot = {
   setUp: function (done) {
     // setup here if necessary
     done();
   },
   compile: function (test) {
-    test.expect(1);
     var actual = grunt.file.read('test/tmp/concatFile.js');
     var expected = grunt.file.read('test/expected/concatFile.js');
-
-    test.equal(actual, expected);
+    test.equal(cleanCode(actual),cleanCode(expected));
     test.done();
   }
 

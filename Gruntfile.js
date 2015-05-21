@@ -36,11 +36,14 @@ module.exports = function (grunt) {
       compile: {
         options: {
 					concat: true,
-					modular: [
-						'riot',
-						{'jquery': '$'},
-						{'lib/my_module': 'MyModule'}
-					]
+					modular: {
+						type: 'umd',
+						deps: [
+							'riot',
+							{'jquery': '$'},
+							{'lib/my_module': 'MyModule'}
+						]
+					}
 				},
         src: 'test/fixtures/*.tag',
         dest: 'test/tmp/concatFile.js'
