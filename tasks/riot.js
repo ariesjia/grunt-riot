@@ -76,7 +76,7 @@ module.exports = function (grunt) {
 
 				modularConfig.deps = modularConfig.deps || [];
 
-				if(modularConfig.deps.indexOf('riot')){
+				if(modularConfig.deps.indexOf('riot') < 0){
 					modularConfig.deps.unshift('riot');
 				}
 
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
 
 				return modularize(modularConfig);
 			}else{
-				return source;g
+				return source;
 			}
 		}
 
