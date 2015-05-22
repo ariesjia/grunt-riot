@@ -10,33 +10,26 @@
 
 
 module.exports = function (grunt) {
+	require('grunt-modularize/tasks/modularize')(grunt);
 
 	var riot = require('riot'),
 		concat = require('concat-stream');
 
-	var modularize = require('./lib/modularize');
-
-	var isType = function (type) {
-		return function (obj) {
-			return {}.toString.call(obj) == "[object " + type + "]";
-		};
-	};
-
 	grunt.registerMultiTask('riot', 'riot custom tag compiler plugin', function () {
 		var options = this.options({
-			compact : true ,
-			expr : true ,
-			type : null ,
-			template : null,
-			fileConfig : null,
-			concat : false,
+			compact: true,
+			expr: true,
+			type: null,
+			template: null,
+			fileConfig: null,
+			concat: false,
 			modular: false
 		});
 
 		var modularFiles = {};
 
-		var removeInvalidFiles = function(files) {
-			return files.src.filter(function(filepath) {
+		var removeInvalidFiles = function (files) {
+			return files.src.filter(function (filepath) {
 				if (!grunt.file.exists(filepath)) {
 					grunt.log.warn('Source file "' + filepath + '" not found.');
 					return false;
@@ -46,12 +39,12 @@ module.exports = function (grunt) {
 			});
 		};
 
-		var clone = function(obj) {
+		var clone = function (obj) {
 			return JSON.parse(JSON.stringify(obj));
 		};
 
-		var compileRiot = function(code, opts){
-			return riot.compile(code,opts);
+		var compileRiot = function (code, opts) {
+			return riot.compile(code, opts);
 		};
 
 		var writeFile = function (path, output) {
@@ -60,32 +53,7 @@ module.exports = function (grunt) {
 		};
 
 		function getOptions(file, options) {
-			return options.fileConfig ? options.fileConfig(file,clone(options)) : options;
-		}
-
-		function compileModular(source,config){
-			config = config || options;
-
-			if(config.modular){
-
-				if(!isType("Object")(config.modular)){
-					config.modular = {};
-				}
-
-				var modularConfig = config.modular ;
-
-				modularConfig.deps = modularConfig.deps || [];
-
-				if(modularConfig.deps.indexOf('riot') < 0){
-					modularConfig.deps.unshift('riot');
-				}
-
-				modularConfig.input = source;
-
-				return modularize(modularConfig);
-			}else{
-				return source;
-			}
+			return options.fileConfig ? options.fileConfig(file, clone(options)) : options;
 		}
 
 		var validFiles = this.files.map(function (files) {
@@ -96,32 +64,67 @@ module.exports = function (grunt) {
 		});
 
 		validFiles.forEach(function (files, x) {
-			if(options.concat){
-				var strings = concat(function(out) {
+			if (options.concat) {
+				var strings = concat(function (out) {
 					writeFile(
-						files.dest ,
-						compileModular(out)
+						files.dest,
+						out
 					);
 				});
-				files.src.map(function(file, y){
-					var fileSource = compileRiot( grunt.file.read(file) , getOptions(file,options) );
+				files.src.map(function (file, y) {
+					var fileSource = compileRiot(grunt.file.read(file), getOptions(file, options));
 					strings.write(fileSource + '\n');
 				});
-
 				strings.end();
-			}else{
-				files.src.map(function(file){
+			} else {
+				files.src.map(function (file) {
 					writeFile(
-						files.dest ,
-						compileModular(
-							compileRiot( grunt.file.read(file) , getOptions(file,options) ),
-							getOptions(file,options)
-						)
+						files.dest,
+						compileRiot(grunt.file.read(file), getOptions(file, options))
 					);
 				});
 			}
+
+			if (options.modular) {
+				modularFiles[files.dest] = files.dest;
+			}
 		});
 
-	});
+		if (options.modular) {
+			if (typeof(options.modular) !== 'object') {
+				options.modular = {};
+			}
 
+			if (!options.modular.deps) {
+				options.modular.deps = [];
+			}
+
+			var hasRiotDep;
+			var len = options.modular.deps.length;
+
+			for (var i = 0; i < len; i++) {
+				var dep = options.modular.deps[i];
+
+				if (dep === 'riot') {
+					hasRiotDep = true;
+					break;
+				}
+				else if (typeof(dep) === 'object' && Object.keys(dep)[0] === 'riot') {
+					hasRiotDep = true;
+					break;
+				}
+			}
+
+			if (!hasRiotDep) {
+				options.modular.deps.unshift('riot');
+			}
+
+			grunt.config.set('modularize.riot', {
+				options: options.modular,
+				files: modularFiles
+			});
+
+			grunt.task.run(['modularize:riot']);
+		}
+	});
 };
