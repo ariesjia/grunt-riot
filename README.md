@@ -2,6 +2,8 @@
 
 > grunt plugin for riot
 
+[![Build Status](https://travis-ci.org/ariesjia/grunt-riot.svg?branch=master)](https://travis-ci.org/ariesjia/grunt-riot)
+
 This plugin compile [riot](https://github.com/muut/riotjs)'s `.tag` files.
 
 ## Getting Started
