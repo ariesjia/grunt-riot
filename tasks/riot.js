@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 	var riot = require('riot'),
 		concat = require('concat-stream');
 
-	var modularize = require('./lib/modularize');
+	var modularize = require('modularize');
 
 	var isType = function (type) {
 		return function (obj) {
@@ -32,8 +32,6 @@ module.exports = function (grunt) {
 			concat : false,
 			modular: false
 		});
-
-		var modularFiles = {};
 
 		var removeInvalidFiles = function(files) {
 			return files.src.filter(function(filepath) {
