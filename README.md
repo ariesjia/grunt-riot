@@ -112,7 +112,7 @@ if you want use typescript , coffee or es , you should install compile module
 
 * typescript :  typescript-simple
 * coffeescript :  coffee-script
-* es6 :  6to5
+* es6 :  Babel
 * jade :  jade
 
 See more: [https://muut.com/riotjs/compiler.html](https://muut.com/riotjs/compiler.html)
