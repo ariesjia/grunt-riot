@@ -35,16 +35,8 @@ module.exports = function (grunt) {
     riot: {
       compile: {
         options: {
-					concat: true,
-					modular: {
-						type: 'umd',
-						deps: [
-							'riot',
-							{'jquery': '$'},
-							{'lib/my_module': 'MyModule'}
-						]
-					}
-				},
+			concat: true
+		},
         src: 'test/fixtures/*.tag',
         dest: 'test/tmp/concatFile.js'
       }
@@ -62,6 +54,8 @@ module.exports = function (grunt) {
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'riot:compile', 'nodeunit']);
+
+  grunt.registerTask('compile', ['riot:compile']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test', 'clean']);
