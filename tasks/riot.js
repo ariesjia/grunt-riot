@@ -78,6 +78,15 @@ module.exports = function (grunt) {
 					modularConfig.deps.unshift('riot');
 				}
 
+				if (modularConfig.exports) {
+					if (options.concat) {
+						grunt.log.warn('Cannot export "' + modularConfig.exports + '" if concat option is enabled.');
+					}
+					else {
+						source = 'var ' + modularConfig.exports + ' = ' + source;
+					}
+				}
+
 				modularConfig.input = source;
 
 				return modularize(modularConfig);
