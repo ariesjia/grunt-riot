@@ -1,6 +1,6 @@
 {
   "name": "grunt-riot",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "riot custom tag compile grunt plugin.",
   "repository": "https://github.com/ariesjia/grunt-riot",
   "author": {
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "concat-stream": "^1.4.7",
-    "modularize": "^0.1.5",
+    "modularize": "^0.1.7",
     "riot": "^2.3"
   }
 }
